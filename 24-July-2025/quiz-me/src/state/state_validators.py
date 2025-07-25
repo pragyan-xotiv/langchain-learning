@@ -1,105 +1,94 @@
-"""State validation utilities for the Interactive Quiz Generator
+"""State transition validation utilities
 
-This module provides validation functions for state transitions and data integrity
-throughout the quiz workflow.
-
-To be implemented in Phase 1 following 02-state-management.md
+This module provides validation functions for ensuring state consistency
+and proper transitions between states.
 """
 
-from typing import List, Optional, Tuple, Any
-import logging
+from typing import List
 from .quiz_state import QuizState
-from .state_types import QuizPhase, UserIntent
 
-logger = logging.getLogger(__name__)
-
-class StateValidationError(Exception):
-    """Exception raised when state validation fails"""
-    pass
-
-class StateValidator:
+def validate_state_consistency(state: QuizState) -> List[str]:
     """
-    Validator class for QuizState transitions and data integrity.
-    
-    This class will provide:
-    - State transition validation
-    - Data integrity checking
-    - Business rule enforcement
-    - Error detection and reporting
-    
-    Placeholder - see 02-state-management.md for full implementation
-    """
-    
-    def __init__(self):
-        """Initialize state validator - placeholder"""
-        logger.info("Initializing StateValidator - placeholder implementation")
-    
-    def validate_transition(self, from_phase: QuizPhase, to_phase: QuizPhase, state: QuizState) -> bool:
-        """
-        Validate that a phase transition is allowed and makes sense.
-        
-        Args:
-            from_phase: Current phase
-            to_phase: Target phase
-            state: Current state object
-            
-        Returns:
-            True if transition is valid
-            
-        Raises:
-            StateValidationError: If transition is invalid
-            
-        Placeholder - full implementation coming
-        """
-        logger.info(f"Validating transition {from_phase} -> {to_phase} - placeholder")
-        # TODO: Implement comprehensive transition validation
-        return True
-    
-    def validate_state_integrity(self, state: QuizState) -> List[str]:
-        """
-        Validate overall state integrity and consistency.
-        
-        Args:
-            state: State object to validate
-            
-        Returns:
-            List of validation error messages (empty if valid)
-            
-        Placeholder - full implementation coming
-        """
-        logger.info("Validating state integrity - placeholder")
-        # TODO: Implement comprehensive state integrity checking
-        return []
-    
-    def validate_business_rules(self, state: QuizState) -> List[str]:
-        """
-        Validate business rules and constraints.
-        
-        Args:
-            state: State object to validate
-            
-        Returns:
-            List of business rule violations (empty if valid)
-            
-        Placeholder - full implementation coming
-        """
-        logger.info("Validating business rules - placeholder")
-        # TODO: Implement business rule validation
-        return []
-
-def validate_state_transition(state: QuizState, new_phase: QuizPhase) -> Tuple[bool, Optional[str]]:
-    """
-    Convenience function to validate a state transition.
+    Validate state consistency across all fields.
     
     Args:
-        state: Current state
-        new_phase: Target phase
+        state: QuizState object to validate
         
     Returns:
-        Tuple of (is_valid, error_message)
-        
-    Placeholder - full implementation coming
+        List of validation error messages (empty if valid)
     """
-    logger.info(f"Validating state transition to {new_phase} - placeholder")
-    # TODO: Implement transition validation logic
-    return True, None 
+    errors = []
+    
+    # Quiz activation validation
+    if state.quiz_active and not state.topic_validated:
+        errors.append("Quiz cannot be active without validated topic")
+    
+    # Question indexing validation
+    if state.current_question_index > len(state.user_answers) + 1:
+        errors.append("Question index inconsistent with answer history")
+    
+    # Scoring validation
+    if state.correct_answers_count > state.total_questions_answered:
+        errors.append("Correct answers cannot exceed total answered")
+    
+    if state.total_questions_answered != len(state.user_answers):
+        errors.append("Answer history length doesn't match total questions answered")
+    
+    # Phase validation
+    phase_requirements = {
+        "topic_selection": [],
+        "topic_validation": ["user_input"],
+        "quiz_active": ["topic", "topic_validated"],
+        "question_answered": ["current_answer", "answer_is_correct"],
+        "quiz_complete": ["quiz_completed"]
+    }
+    
+    required_fields = phase_requirements.get(state.current_phase, [])
+    for field in required_fields:
+        if not getattr(state, field):
+            errors.append(f"Phase '{state.current_phase}' requires field '{field}'")
+    
+    # Completion validation
+    if state.quiz_type == "finite" and state.max_questions:
+        if state.total_questions_answered > state.max_questions:
+            errors.append("Questions answered exceeds maximum for finite quiz")
+    
+    return errors
+
+
+def validate_state_transition(old_state: QuizState, new_state: QuizState) -> List[str]:
+    """
+    Validate state transition between two states.
+    
+    Args:
+        old_state: Previous state
+        new_state: New state after transition
+        
+    Returns:
+        List of validation error messages (empty if valid)
+    """
+    errors = []
+    
+    # Session ID should remain constant
+    if old_state.session_id != new_state.session_id:
+        errors.append("Session ID should not change during transitions")
+    
+    # Question index should only increase or reset
+    if (new_state.current_question_index != 0 and 
+        new_state.current_question_index < old_state.current_question_index):
+        errors.append("Question index should not decrease (except on reset)")
+    
+    # Score should not decrease
+    if new_state.total_score < old_state.total_score:
+        errors.append("Total score should not decrease")
+    
+    # Answer count should not decrease
+    if new_state.total_questions_answered < old_state.total_questions_answered:
+        errors.append("Total questions answered should not decrease")
+    
+    return errors
+
+__all__ = [
+    "validate_state_consistency",
+    "validate_state_transition"
+] 

@@ -1,136 +1,68 @@
-"""State serialization utilities for the Interactive Quiz Generator
+"""JSON serialization utilities for state persistence
 
-This module provides serialization and deserialization utilities for QuizState
-objects, supporting persistence, caching, and debugging.
-
-To be implemented in Phase 1 following 02-state-management.md
+This module provides functions for serializing and deserializing QuizState
+objects to and from JSON format for persistence and transport.
 """
 
-from typing import Dict, Any, Optional
 import json
-import logging
 from datetime import datetime
 from .quiz_state import QuizState
 
-logger = logging.getLogger(__name__)
-
-class StateSerializationError(Exception):
-    """Exception raised during state serialization/deserialization"""
-    pass
-
-class StateSerializer:
-    """
-    Serializer class for QuizState objects.
-    
-    This class will provide:
-    - JSON serialization with proper datetime handling
-    - Deserialization with validation
-    - Compression for large state objects
-    - Version compatibility handling
-    
-    Placeholder - see 02-state-management.md for full implementation
-    """
-    
-    def __init__(self):
-        """Initialize state serializer - placeholder"""
-        logger.info("Initializing StateSerializer - placeholder implementation")
-    
-    def serialize(self, state: QuizState) -> str:
-        """
-        Serialize QuizState to JSON string.
-        
-        Args:
-            state: QuizState object to serialize
-            
-        Returns:
-            JSON string representation
-            
-        Raises:
-            StateSerializationError: If serialization fails
-            
-        Placeholder - full implementation coming
-        """
-        logger.info("Serializing QuizState - placeholder")
-        # TODO: Implement comprehensive state serialization
-        return json.dumps({"placeholder": "serialized_state"})
-    
-    def deserialize(self, json_str: str) -> QuizState:
-        """
-        Deserialize JSON string to QuizState object.
-        
-        Args:
-            json_str: JSON string to deserialize
-            
-        Returns:
-            QuizState object
-            
-        Raises:
-            StateSerializationError: If deserialization fails
-            
-        Placeholder - full implementation coming
-        """
-        logger.info("Deserializing QuizState - placeholder")
-        # TODO: Implement comprehensive state deserialization
-        return QuizState()
-    
-    def to_dict(self, state: QuizState) -> Dict[str, Any]:
-        """
-        Convert QuizState to dictionary.
-        
-        Args:
-            state: QuizState object to convert
-            
-        Returns:
-            Dictionary representation
-            
-        Placeholder - full implementation coming
-        """
-        logger.info("Converting QuizState to dict - placeholder")
-        # TODO: Implement state-to-dict conversion
-        return {"placeholder": "state_dict"}
-    
-    def from_dict(self, data: Dict[str, Any]) -> QuizState:
-        """
-        Create QuizState from dictionary.
-        
-        Args:
-            data: Dictionary data
-            
-        Returns:
-            QuizState object
-            
-        Placeholder - full implementation coming
-        """
-        logger.info("Creating QuizState from dict - placeholder")
-        # TODO: Implement dict-to-state conversion
-        return QuizState()
-
 def serialize_state(state: QuizState) -> str:
     """
-    Convenience function to serialize a QuizState.
+    Serialize state to JSON string for persistence.
     
     Args:
-        state: QuizState to serialize
+        state: QuizState object to serialize
         
     Returns:
         JSON string representation
-        
-    Placeholder - full implementation coming
     """
-    serializer = StateSerializer()
-    return serializer.serialize(state)
+    state_dict = state.model_dump()
+    
+    # Convert datetime objects to ISO strings
+    for key, value in state_dict.items():
+        if isinstance(value, datetime):
+            state_dict[key] = value.isoformat()
+    
+    # Add serialization metadata
+    state_dict['_serialized_at'] = datetime.now().isoformat()
+    state_dict['_version'] = "1.0"
+    
+    return json.dumps(state_dict, indent=2, default=str)
 
-def deserialize_state(json_str: str) -> QuizState:
+
+def deserialize_state(state_json: str) -> QuizState:
     """
-    Convenience function to deserialize a QuizState.
+    Deserialize state from JSON string.
     
     Args:
-        json_str: JSON string to deserialize
+        state_json: JSON string representation
         
     Returns:
         QuizState object
         
-    Placeholder - full implementation coming
+    Raises:
+        ValueError: If deserialization fails
     """
-    serializer = StateSerializer()
-    return serializer.deserialize(json_str) 
+    try:
+        state_dict = json.loads(state_json)
+        
+        # Remove serialization metadata
+        state_dict.pop('_serialized_at', None)
+        state_dict.pop('_version', None)
+        
+        # Convert ISO strings back to datetime objects
+        for key in ['created_at', 'updated_at']:
+            if key in state_dict and isinstance(state_dict[key], str):
+                state_dict[key] = datetime.fromisoformat(state_dict[key])
+        
+        return QuizState(**state_dict)
+        
+    except (json.JSONDecodeError, TypeError, ValueError) as e:
+        raise ValueError(f"Failed to deserialize state: {str(e)}")
+
+__all__ = [
+    "serialize_state",
+    "deserialize_state"
+] 

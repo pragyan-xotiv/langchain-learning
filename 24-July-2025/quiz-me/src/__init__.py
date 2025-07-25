@@ -34,9 +34,9 @@ from .prompts import (
 )
 
 from .state import (
-    QuizState, StateValidator, StateSerializer,
-    create_initial_state, create_test_state,
-    QuizPhase, UserIntent, QuestionType
+    QuizState, validate_state_consistency, validate_state_transition,
+    serialize_state, deserialize_state,
+    create_initial_state, create_test_state
 )
 
 # Import workflow and utilities
@@ -60,9 +60,9 @@ __all__ = [
     "format_summary_generation_prompt", "PromptType", "PromptTemplate", "PromptManager",
     
     # State management
-    "QuizState", "StateValidator", "StateSerializer",
+    "QuizState", "validate_state_consistency", "validate_state_transition",
+    "serialize_state", "deserialize_state",
     "create_initial_state", "create_test_state",
-    "QuizPhase", "UserIntent", "QuestionType",
     
     # Workflow and utilities
     "QuizWorkflow", "create_quiz_workflow",

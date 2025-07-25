@@ -12,7 +12,21 @@ This guide implements the five core processing nodes that handle the quiz workfl
 
 ## 🏗️ Node Architecture Implementation
 
-Create the complete node system in `src/nodes.py`:
+### 🆕 Modular Node Package Structure
+
+The node system is now organized in the `src/nodes/` package:
+
+```
+src/nodes/
+├── __init__.py              # Package imports and exports
+├── query_analyzer.py        # User input intent analysis
+├── topic_validator.py       # Topic appropriateness validation  
+├── quiz_generator.py        # Question generation logic
+├── answer_validator.py      # Response evaluation and scoring
+└── score_generator.py       # Progress tracking and analytics
+```
+
+Create each node in its dedicated module. Start with `src/nodes/query_analyzer.py`:
 
 ```python
 """Processing nodes for the Interactive Quiz Generator workflow"""

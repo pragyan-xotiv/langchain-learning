@@ -12,7 +12,22 @@ This guide implements the conditional routing logic that determines how the appl
 
 ## 🏗️ Edge Logic Implementation
 
-Create the complete edge system in `src/edges.py`:
+### 🆕 Modular Edge Package Structure
+
+The routing logic is now organized in the `src/edges/` package:
+
+```
+src/edges/
+├── __init__.py                    # Package imports and exports
+├── conversation_router.py         # Main conversation flow routing
+├── query_analyzer_router.py       # Routes after query analysis
+├── topic_validator_router.py      # Routes after topic validation
+├── quiz_generator_router.py       # Routes after question generation
+├── answer_validator_router.py     # Routes after answer validation
+└── score_generator_router.py      # Routes after score generation
+```
+
+Create each router in its dedicated module. Start with `src/edges/conversation_router.py`:
 
 ```python
 """Edge logic and routing for the Interactive Quiz Generator workflow"""

@@ -4,6 +4,30 @@
 
 This document contains the LLM prompt templates used throughout the Interactive Quiz Generator. Each prompt is designed for specific tasks and includes context variables, structured outputs, and error handling.
 
+## 🆕 Modular Prompt Structure
+
+The prompt system is now organized in a dedicated package (`src/prompts/`) with comprehensive template management:
+
+```
+src/prompts/
+├── __init__.py                  # Imports all prompt templates and utilities
+├── prompt_types.py              # Shared types and enumerations
+├── prompt_manager.py            # Template management and formatting system
+├── intent_classification.py     # Intent analysis prompts  
+├── topic_extraction.py          # Topic extraction prompts
+├── topic_validation.py          # Topic validation prompts
+├── question_generation.py       # Question creation prompts
+├── answer_validation.py         # Answer evaluation prompts
+├── clarification.py             # Clarification request prompts
+└── summary_generation.py        # Performance summary prompts
+```
+
+### Enhanced Prompt Components:
+- **Modular Templates**: Each prompt type in its own module for better organization
+- **Prompt Manager**: Centralized template loading, formatting, and validation
+- **Shared Types**: Common enumerations and data structures across all prompts
+- **Response Validation**: Structured output parsing and validation utilities
+
 ## Query Analyzer Prompts
 
 ### Intent Classification Prompt

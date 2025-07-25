@@ -4,6 +4,26 @@
 
 The Interactive Quiz Generator uses a node-based architecture where each node handles a specific aspect of the quiz workflow. Nodes are connected through conditional edges and communicate via the shared state object.
 
+## 🆕 Modular Node Structure
+
+The nodes are now organized in a dedicated package (`src/nodes/`) with each node implemented in its own module:
+
+```
+src/nodes/
+├── __init__.py              # Imports all node functions
+├── query_analyzer.py        # User input intent analysis
+├── topic_validator.py       # Topic appropriateness validation  
+├── quiz_generator.py        # Question generation logic
+├── answer_validator.py      # Response evaluation and scoring
+└── score_generator.py       # Progress tracking and analytics
+```
+
+Each node module contains:
+- The main node function implementation
+- Node-specific error classes
+- Comprehensive documentation and typing
+- Individual logging and error handling
+
 ## Node Specifications
 
 ### 1. Query Analyzer Node

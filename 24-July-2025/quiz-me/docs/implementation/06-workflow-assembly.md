@@ -28,7 +28,11 @@ from .nodes import (
     query_analyzer, topic_validator, quiz_generator,
     answer_validator, score_generator
 )
-from .edges import route_conversation, route_after_score_generation
+from .edges import (
+    route_conversation, route_from_query_analyzer,
+    route_from_topic_validator, route_from_quiz_generator,
+    route_from_answer_validator, route_from_score_generator
+)
 from .utils import Config
 
 # Configure logging

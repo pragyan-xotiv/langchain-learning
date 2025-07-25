@@ -12,9 +12,23 @@ This guide implements the `QuizState` class using Pydantic models, providing cen
 
 ## 🏗️ QuizState Implementation
 
+### 🆕 Modular State Package Structure
+
+The state management is now organized in the `src/state/` package:
+
+```
+src/state/
+├── __init__.py              # Package imports and exports
+├── state_types.py           # Enums and data structures
+├── quiz_state.py            # Main QuizState class
+├── state_validators.py      # State transition validation
+├── state_serializers.py     # JSON serialization utilities
+└── state_factory.py         # Factory functions for testing
+```
+
 ### Core State Class
 
-Create the complete state class in `src/state.py`:
+Create the complete state class in `src/state/quiz_state.py`:
 
 ```python
 """State management for the Interactive Quiz Generator"""

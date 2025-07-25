@@ -12,7 +12,25 @@ This guide implements the complete LLM prompt template system for the Interactiv
 
 ## 🏗️ Prompt System Architecture
 
-Create the prompt management system in `src/prompts.py`:
+### 🆕 Modular Prompt Package Structure
+
+The prompt system is now organized in the `src/prompts/` package:
+
+```
+src/prompts/
+├── __init__.py                  # Package imports and exports
+├── prompt_types.py              # Shared types and enumerations
+├── prompt_manager.py            # Template management system
+├── intent_classification.py     # Intent analysis prompts  
+├── topic_extraction.py          # Topic extraction prompts
+├── topic_validation.py          # Topic validation prompts
+├── question_generation.py       # Question creation prompts
+├── answer_validation.py         # Answer evaluation prompts
+├── clarification.py             # Clarification request prompts
+└── summary_generation.py        # Performance summary prompts
+```
+
+Create the prompt types and manager in `src/prompts/prompt_types.py` and `src/prompts/prompt_manager.py`:
 
 ```python
 """LLM prompt templates and management system"""

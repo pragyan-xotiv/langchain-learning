@@ -4,6 +4,26 @@
 
 The Interactive Quiz Generator uses a centralized state object to maintain all application data throughout the user session. This state is passed between nodes and updated as the quiz progresses, ensuring consistent data flow and enabling complex conditional logic.
 
+## 🆕 Modular State Structure
+
+The state management is now organized in a dedicated package (`src/state/`) with comprehensive components:
+
+```
+src/state/
+├── __init__.py              # Imports all state management components
+├── state_types.py           # Enums and data structures (QuizPhase, UserIntent, etc.)
+├── quiz_state.py            # Main QuizState class with 20+ typed fields
+├── state_validators.py      # State transition validation utilities
+├── state_serializers.py     # JSON serialization and persistence
+└── state_factory.py         # Factory functions for testing and initialization
+```
+
+### Enhanced State Components:
+- **Comprehensive Field Validation**: 20+ properly typed fields with Pydantic validation
+- **State Transition Validation**: Ensures valid phase transitions and data integrity
+- **Serialization Support**: JSON serialization for persistence and debugging
+- **Factory Functions**: Easy creation of test states and initial configurations
+
 ## State Schema
 
 ### Core State Structure

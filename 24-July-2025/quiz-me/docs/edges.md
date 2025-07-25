@@ -4,6 +4,27 @@
 
 The Interactive Quiz Generator uses conditional edges to route the application flow based on the current state. These edges determine which node to execute next, enabling dynamic conversation flow and proper error handling.
 
+## 🆕 Modular Edge Structure
+
+The routing logic is now organized in a dedicated package (`src/edges/`) with each router implemented in its own module:
+
+```
+src/edges/
+├── __init__.py                    # Imports all routing functions
+├── conversation_router.py         # Main conversation flow routing
+├── query_analyzer_router.py       # Routes after query analysis
+├── topic_validator_router.py      # Routes after topic validation
+├── quiz_generator_router.py       # Routes after question generation
+├── answer_validator_router.py     # Routes after answer validation
+└── score_generator_router.py      # Routes after score generation
+```
+
+Each router module contains:
+- Specialized routing logic for specific transitions
+- State validation before routing decisions
+- Error recovery and fallback routing
+- Detailed logging and debugging support
+
 ## Edge Decision Framework
 
 ### Primary Decision Factors

@@ -30,7 +30,8 @@ from .prompts import (
     format_intent_classification_prompt, format_topic_extraction_prompt,
     format_topic_validation_prompt, format_question_generation_prompt,
     format_answer_validation_prompt, format_clarification_prompt,
-    format_summary_generation_prompt, PromptType, PromptTemplate, PromptManager
+    format_summary_generation_prompt, PromptType, PromptTemplate, PromptManager,
+    validate_prompt_response, extract_json_from_response
 )
 
 from .state import (
@@ -58,6 +59,7 @@ __all__ = [
     "format_topic_validation_prompt", "format_question_generation_prompt", 
     "format_answer_validation_prompt", "format_clarification_prompt",
     "format_summary_generation_prompt", "PromptType", "PromptTemplate", "PromptManager",
+    "validate_prompt_response", "extract_json_from_response",
     
     # State management
     "QuizState", "validate_state_consistency", "validate_state_transition",

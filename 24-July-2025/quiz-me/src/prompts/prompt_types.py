@@ -1,8 +1,4 @@
-"""Prompt types and template definitions for the Interactive Quiz Generator
-
-This module defines the core data structures and enumerations used throughout
-the prompt template system.
-"""
+"""Shared types and enumerations for prompt management"""
 
 from typing import List, Optional
 from dataclasses import dataclass
@@ -29,6 +25,5 @@ class PromptTemplate:
     expected_output: str = "json"
     
     def __post_init__(self):
-        """Initialize optional fields"""
         if self.optional_vars is None:
             self.optional_vars = [] 

@@ -21,9 +21,11 @@ from .nodes import (
 )
 
 from .edges import (
-    route_conversation, route_from_query_analyzer,
-    route_from_topic_validator, route_from_quiz_generator,
-    route_from_answer_validator, route_from_score_generator
+    route_conversation, main_route_conversation,
+    route_after_query_analysis, route_after_topic_validation,
+    route_after_question_generation, route_after_answer_validation,
+    route_after_scoring, should_end_session, should_start_new_quiz,
+    should_continue_quiz, classify_error_type, validate_routing_decision
 )
 
 from .prompts import (
@@ -50,9 +52,11 @@ __all__ = [
     "answer_validator", "score_generator",
     
     # Edge functions
-    "route_conversation", "route_from_query_analyzer", 
-    "route_from_topic_validator", "route_from_quiz_generator",
-    "route_from_answer_validator", "route_from_score_generator",
+    "route_conversation", "main_route_conversation",
+    "route_after_query_analysis", "route_after_topic_validation", 
+    "route_after_question_generation", "route_after_answer_validation",
+    "route_after_scoring", "should_end_session", "should_start_new_quiz",
+    "should_continue_quiz", "classify_error_type", "validate_routing_decision",
     
     # Prompt functions and classes
     "format_intent_classification_prompt", "format_topic_extraction_prompt",

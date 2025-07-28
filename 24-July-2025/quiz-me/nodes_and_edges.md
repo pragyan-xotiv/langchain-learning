@@ -1,4 +1,5 @@
-# Nodes and Edges Reference
+# Quiz App
+Conversational quiz application
 
 ## Nodes
 
